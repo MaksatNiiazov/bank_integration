@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { Icon } from './components/Icon';
+import { AppShell, Icon } from '@turkuaz/ui';
 import {
   assignRole,
   clearToken,
@@ -100,43 +100,61 @@ export function App() {
     { label: 'Филиалы', value: data.branches.length, icon: 'building' as const },
   ];
 
+  const navItems = [
+    {
+      key: 'users',
+      label: 'Пользователи',
+      icon: 'users' as const,
+      active: true,
+      onClick: () => {
+        window.location.hash = 'users';
+      },
+    },
+    {
+      key: 'roles',
+      label: 'Роли',
+      icon: 'key' as const,
+      active: false,
+      onClick: () => {
+        window.location.hash = 'roles';
+      },
+    },
+    {
+      key: 'branches',
+      label: 'Филиалы',
+      icon: 'building' as const,
+      active: false,
+      onClick: () => {
+        window.location.hash = 'branches';
+      },
+    },
+    {
+      key: 'services',
+      label: 'Сервисы',
+      icon: 'database' as const,
+      active: false,
+      onClick: () => {
+        window.location.hash = 'services';
+      },
+    },
+  ];
+
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <a className="brand" href="/">
-          <span className="brand-mark">T</span>
-          <span>
-            <strong>Turkuaz Identity</strong>
-            <small>Users and access</small>
-          </span>
-        </a>
-
-        <nav className="nav-list" aria-label="Identity navigation">
-          <a className="nav-link nav-link-active" href="#users">
-            <Icon name="users" />
-            Пользователи
-          </a>
-          <a className="nav-link" href="#roles">
-            <Icon name="key" />
-            Роли
-          </a>
-          <a className="nav-link" href="#branches">
-            <Icon name="building" />
-            Филиалы
-          </a>
-          <a className="nav-link" href="#services">
-            <Icon name="database" />
-            Сервисы
-          </a>
-        </nav>
-
-        <div className="sidebar-footer">
-          <span>Текущий пользователь</span>
-          <strong>{data.me?.email || 'unknown'}</strong>
-        </div>
-      </aside>
-
-      <main className="workspace">
+    <AppShell
+      brand={{
+        href: 'http://localhost:5174',
+        mark: 'T',
+        title: 'Turkuaz Identity',
+        subtitle: data.me?.email || 'Users and access',
+      }}
+      navItems={navItems}
+      sideLinks={[
+        { href: 'http://localhost:5174', label: 'Platform', icon: 'building' },
+        { href: 'http://localhost:6750', label: 'Payments', icon: 'banknote' },
+        { href: '/docs', label: 'Swagger', icon: 'file' },
+      ]}
+      storageKey="turkuaz-identity-shell"
+    >
         <header className="topbar">
           <div>
             <h1>Пользователи и доступы</h1>
@@ -263,8 +281,7 @@ export function App() {
             <DirectoryPanel data={data} />
           </div>
         </section>
-      </main>
-    </div>
+    </AppShell>
   );
 }
 

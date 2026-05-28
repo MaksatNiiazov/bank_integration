@@ -29,7 +29,8 @@ services:
 
   identity-web:
     build:
-      context: ./frontend
+      context: ..
+      dockerfile: identity-service/frontend/Dockerfile
     environment:
       VITE_PROXY_TARGET: http://identity:8020
     ports:

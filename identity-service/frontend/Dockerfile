@@ -1,11 +1,16 @@
 FROM node:22-alpine
 
-WORKDIR /app
+WORKDIR /workspace
 
-COPY package.json package-lock.json* ./
+COPY turkuaz-ui/package.json ./turkuaz-ui/package.json
+COPY turkuaz-ui/src ./turkuaz-ui/src
+COPY identity-service/frontend/.npmrc ./identity-service/frontend/.npmrc
+COPY identity-service/frontend/package.json identity-service/frontend/package-lock.json* ./identity-service/frontend/
+
+WORKDIR /workspace/identity-service/frontend
 RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
-COPY . .
+COPY identity-service/frontend ./
 
 EXPOSE 5177
 
