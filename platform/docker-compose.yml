@@ -1,0 +1,27 @@
+services:
+  platform-api:
+    build:
+      context: ./apps/api
+    env_file:
+      - ./apps/api/.env.example
+    environment:
+      PLATFORM_SERVICES_JSON: >
+        [
+          {"code":"identity","name":"Identity","department":"Platform","description":"Users, roles, branches, permissions","base_url":"http://host.docker.internal:8020","health_path":"/api/v1/health","launch_url":"http://localhost:8020/docs","required_permission":"identity.users.read","sort_order":10},
+          {"code":"converter","name":"Converter","department":"Operations","description":"Orders, clients, products, converter history","base_url":"http://host.docker.internal:8000","health_path":"/api/v1/health","launch_url":"http://localhost:5173","required_permission":"converter.orders.read","sort_order":20},
+          {"code":"payments","name":"Payments","department":"Finance","description":"Transactions, QR, payment callbacks","base_url":"http://host.docker.internal:8010","health_path":"/health","launch_url":"http://localhost:6750","required_permission":"payments.transactions.read","sort_order":30},
+          {"code":"reports","name":"Reports","department":"Management","description":"Company metrics and department reports","base_url":"http://host.docker.internal:8040","health_path":"/api/v1/health","launch_url":"http://localhost:5175","required_permission":"reports.read","sort_order":40},
+          {"code":"warehouse","name":"Warehouse","department":"Logistics","description":"Stock, shipments, warehouse signals","base_url":"http://host.docker.internal:8050","health_path":"/api/v1/health","launch_url":"http://localhost:5176","required_permission":"warehouse.read","sort_order":50}
+        ]
+    ports:
+      - "8030:8030"
+
+  platform-web:
+    build:
+      context: ./apps/web
+    environment:
+      VITE_PROXY_TARGET: http://platform-api:8030
+    ports:
+      - "5174:5174"
+    depends_on:
+      - platform-api

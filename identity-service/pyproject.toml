@@ -1,0 +1,49 @@
+[project]
+name = "turkuaz-identity-service"
+version = "0.1.0"
+description = "Identity, users, roles, branches, and permissions service for Turkuaz Platform"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "alembic>=1.14.0",
+    "bcrypt>=3.2,<4",
+    "email-validator>=2.2.0",
+    "fastapi>=0.115.0",
+    "passlib[bcrypt]>=1.7.4",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.6.1",
+    "pyjwt>=2.9.0",
+    "python-multipart>=0.0.12",
+    "sqlalchemy>=2.0.36",
+    "uvicorn[standard]>=0.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27.2",
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.8.0",
+]
+postgres = [
+    "psycopg[binary]>=3.2.3",
+]
+
+[project.scripts]
+identity-service = "app.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
